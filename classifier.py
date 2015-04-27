@@ -9,7 +9,7 @@ class Classifier(BaseEstimator):
             ('imputer', Imputer(strategy='most_frequent')),
             ('rf', AdaBoostClassifier(
                 base_estimator=RandomForestClassifier(max_depth=10, n_estimators=20),
-                n_estimators=10)
+                n_estimators=20)
             )
         ])
  
