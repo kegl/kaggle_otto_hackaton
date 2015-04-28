@@ -10,5 +10,4 @@ class FeatureExtractor(object):
 
     def transform(self, X_dict):
         cols = X_dict[0].keys()
-        cols.remove('id') # this takes everything except id
         return np.array([[instance[col] for col in cols] for instance in X_dict])
