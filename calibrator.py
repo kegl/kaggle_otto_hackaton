@@ -1,26 +1,22 @@
 import numpy as np
 from sklearn.isotonic import IsotonicRegression
-import calibration_plots
 
 class Calibrator():
     def __init__(self):
         pass
     
-    def fit(self, X_array, y_list, plot=False):
-        labels = np.sort(np.unique(y_list))
+    def fit(self, X_array, y_array):
+        labels = np.sort(np.unique(y_array))
         self.calibrators = []
         for class_index in range(X_array.shape[1]):
             calibrator = IsotonicRegression(
                 y_min=0., y_max=1., out_of_bounds='clip')
             class_indicator = np.array([1 if y == labels[class_index] else 0 
-                                        for y in y_list])
+                                        for y in y_array])
             calibrator.fit(X_array[:,class_index], class_indicator)
             self.calibrators.append(calibrator)
 
-        if plot:
-            calibration_plots.plot_calibration_plots(
-                self, X_array, class_indicator, labels, "calibration_plot.pdf")
-            
+           
     def predict_proba(self, y_probas_array_uncalibrated):
         num_classes = y_probas_array_uncalibrated.shape[1]
         y_probas_array_transpose = np.array(
