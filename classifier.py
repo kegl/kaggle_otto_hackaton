@@ -11,6 +11,7 @@ from lasagne.layers import DenseLayer
 from lasagne.layers import InputLayer
 from lasagne.layers import DropoutLayer
 from lasagne.nonlinearities import softmax
+from lasagne.nonlinearities import rectify
 from lasagne.updates import nesterov_momentum
 from nolearn.lasagne import NeuralNet
  
@@ -37,18 +38,21 @@ class Classifier(BaseEstimator):
         self.net = NeuralNet(layers=layers0,
                              input_shape=(None, num_features),
                              dense0_num_units=200,
+                             dense0_nonlinearity=rectify,
                              dropout_p=0.5,
-                             dense1_num_units=200,
+                             dense1_num_units=300,
+                             dense1_nonlinearity=rectify,
                              output_num_units=num_classes,
                              output_nonlinearity=softmax,
  
                              update=nesterov_momentum,
-                             update_learning_rate=0.01,
+                             update_learning_rate=0.02,
                              update_momentum=0.9,
  
                              eval_size=0.2,
                              verbose=1,
-                             max_epochs=20)
+                             max_epochs=50,
+                             )
         self.net.fit(X, y)
         return self
  
