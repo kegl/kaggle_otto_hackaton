@@ -29,7 +29,9 @@ class Classifier(BaseEstimator):
     def predict(self, X):
         X = self.scaler.fit_transform(X.astype(np.float32))
         dtest = xgb.DMatrix(X)       
-        return self.label_encoder.inverse_transform(self.clf.predict(dtest))
+        label_index_array = np.argmax(self.clf.predict(dtest), axis=1)
+        print label_index_array
+        return self.label_encoder.inverse_transform(label_index_array)
  
     def predict_proba(self, X):
         X = self.scaler.fit_transform(X.astype(np.float32))
