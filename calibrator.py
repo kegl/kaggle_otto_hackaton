@@ -4,7 +4,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.base import BaseEstimator
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
-import calibration_plots
 
 import theano
 from lasagne.layers import DenseLayer
