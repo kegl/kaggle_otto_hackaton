@@ -15,7 +15,7 @@ class Classifier(BaseEstimator):
         self.param = {'eval_metric':'mlogloss'}
         self.param['num_class'] = 9
         self.param['subsample'] = 0.9        
-        self.num_round = 5 
+        self.num_round = 100
         self.obj = 'multi:softprob'
  
     def fit(self, X, y):        
