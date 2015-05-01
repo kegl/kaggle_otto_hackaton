@@ -27,12 +27,12 @@ class Classifier(BaseEstimator):
         self.clf = xgb.train(self.param, dtrain, self.num_round)  
  
     def predict(self, X):
-        X = self.scaler.fit_transform(X.astype(np.float32))
+        X = self.scaler.transform(X.astype(np.float32))
         dtest = xgb.DMatrix(X)       
         label_index_array = np.argmax(self.clf.predict(dtest), axis=1)
         return self.label_encoder.inverse_transform(label_index_array)
  
     def predict_proba(self, X):
-        X = self.scaler.fit_transform(X.astype(np.float32))
+        X = self.scaler.transform(X.astype(np.float32))
         dtest = xgb.DMatrix(X)
         return self.clf.predict(dtest)
