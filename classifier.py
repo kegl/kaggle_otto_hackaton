@@ -39,7 +39,7 @@ class BaseClassifier(BaseEstimator):
         num_features = X.shape[1]
         self.net = NeuralNet(layers=layers0,
                              input_shape=(None, num_features),
-                             dense0_num_units=200,
+                             dense0_num_units=300,
                              dense0_nonlinearity=rectify,
                              dropout_p=0.5,
                              dense1_num_units=200,
@@ -52,7 +52,7 @@ class BaseClassifier(BaseEstimator):
  
                              eval_size=0.2,
                              verbose=1,
-                             max_epochs=20,
+                             max_epochs=50,
                              )
         self.net.fit(X, y)
         return self
@@ -94,7 +94,7 @@ class Classifier(BaseEstimator):
     def __init__(self):
         self.clf = AdaBoostClassifier(
             base_estimator=WeightedBaseClassifier(BaseClassifier()),
-            n_estimators=10
+            n_estimators=3
         )
  
     def fit(self, X, y):
