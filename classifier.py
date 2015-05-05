@@ -23,7 +23,7 @@ class BaseClassifier(BaseEstimator):
     def __init__(self):
         self.net = None
         self.label_encoder = None
- 
+
     def fit(self, X, y):
         layers0 = [('input', InputLayer),
                    ('dense0', DenseLayer),
@@ -80,7 +80,12 @@ class WeightedBaseClassifier(BaseEstimator):
         sample_indexes = np.random.choice(
             range(X.shape[0]), size=n_sample, p=sample_weight)
         X_sampled = X[sample_indexes]          
-        y_sampled = y[sample_indexes]          
+        y_sampled = y[sample_indexes]
+        sampled_label_encoder = LabelEncoder()
+        sampled_label_encoder.fit(y_sampled)
+        self.sampled_class_indexes_ = np.array(
+            [np.nonzero(self.class_label_encoder_.classes_ == sampled_class)[0][0]
+             for sampled_class in sampled_label_encoder.classes_])
         self.base_classifier.fit(X_sampled, y_sampled)  
  
     def predict(self, X):
@@ -88,7 +93,9 @@ class WeightedBaseClassifier(BaseEstimator):
         return self.class_label_encoder_.inverse_transform(pred)  
  
     def predict_proba(self, X):
-        return self.base_classifier.predict_proba(X)
+        proba = np.zeros([X.shape[0], self.class_label_encoder_.classes_.shape[0]])
+        proba[:,self.sampled_class_indexes_] = self.base_classifier.predict_proba(X)
+        return proba
  
 class Classifier(BaseEstimator):
     def __init__(self):
